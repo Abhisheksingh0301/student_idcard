@@ -28,9 +28,11 @@
         autocomplete="off"
         class="text-sm font-mono w-1/6 text-gray-base mt-2 mr-3 py-2 px-4  border  border-gray-200 rounded mb-1" />
       <input aria-label="Enter class" type="text" name="stclass" placeholder="Class" required autocomplete="on"
-        class="text-sm font-serif uppercase text-gray-base mt-2 mr-3 w-1/6 py-2 px-4  border  border-gray-200 rounded mb-1" value="<%= class %>" />
+        class="text-sm font-serif uppercase text-gray-base mt-2 mr-3 w-1/6 py-2 px-4  border  border-gray-200 rounded mb-1"
+        value="" />
       <input aria-label="Section" type="text" name="stsec" placeholder="Section" autocomplete="on"
-        class="text-sm font-serif uppercase text-gray-base mt-2 mr-3 py-2 px-4  border  border-gray-200 rounded mb-1" value="<%= sec %>" />
+        class="text-sm font-serif uppercase text-gray-base mt-2 mr-3 py-2 px-4  border  border-gray-200 rounded mb-1"
+        value="" />
       <select name="cmbGender" id="cmbGender" required
         class="text-sm  mr-3 font-serif  py-2 px-4 border border-gray-200 w-1/6  rounded mb-1">
         <option value="Male" selected>Male</option>
@@ -51,6 +53,14 @@
         max="999999"
         class="text-sm font-mono text-blue-900 text-gray-base w-1/3 mt-2 mr-3 py-3 px-4  border  border-gray-200 rounded mb-1" />
     </div>
+    <div class="mt-4 mb-4">
+      <button id="openCameraBtn" type="button" class="bg-blue-500 text-white px-4 py-2 rounded">Open Camera</button>
+      <button id="clickPhotoBtn" type="button" class="bg-green-500 text-white px-4 py-2 rounded hidden">Take
+        Photo</button>
+      <video id="cameraStream" width="300" autoplay class="mt-2 hidden"></video>
+      <canvas id="canvas" width="300" height="200" class="hidden"></canvas>
+    </div>
+
     <button type="submit"
       class="bg-green-400 py-3 w-3/4 mb-10 mr-3 font-serif  rounded-lg hover:bg-green-600 hover:rounded-full text-sm">
       Submit
@@ -58,3 +68,64 @@
   </form>
 
   <%- include('footer'); -%>
+
+    <script>
+      const openCameraBtn = document.getElementById('openCameraBtn');
+      const clickPhotoBtn = document.getElementById('clickPhotoBtn');
+      const video = document.getElementById('cameraStream');
+      const canvas = document.getElementById('canvas');
+      let stream;
+
+      openCameraBtn.addEventListener('click', async function () {
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({ video: true });
+          video.srcObject = stream;
+          video.classList.remove('hidden');
+          clickPhotoBtn.classList.remove('hidden');
+        } catch (err) {
+          alert('Camera access denied.');
+          console.error(err);
+        }
+      });
+
+      clickPhotoBtn.addEventListener('click', async function () {
+        const stclass = document.querySelector('[name="stclass"]').value.toUpperCase();
+        const stsec = document.querySelector('[name="stsec"]').value.toUpperCase();
+        const stroll = document.querySelector('[name="stroll"]').value;
+        const filename = `${stclass}${stsec}${stroll}.jpg`;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        const imageBlob = await new Promise(function (resolve) {
+          canvas.toBlob(resolve, 'image/jpeg');
+        });
+
+        if (stream) {
+          stream.getTracks().forEach(function (track) {
+            track.stop();
+          });
+        }
+
+        video.classList.add('hidden');
+        clickPhotoBtn.classList.add('hidden');
+
+        const formData = new FormData();
+        formData.append('photo', imageBlob, filename);
+
+        fetch('/uploadphoto', {
+          method: 'POST',
+          body: formData
+        })
+          .then(function (res) {
+            return res.text();
+          })
+          .then(function (msg) {
+            alert('Photo uploaded as ' + filename);
+          })
+          .catch(function (err) {
+            console.error(err);
+            alert('Error uploading photo');
+          });
+      });
+    </script>

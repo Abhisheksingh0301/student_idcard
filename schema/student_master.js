@@ -5,7 +5,7 @@ var stud_master=new Schema({
     name: {type:String, required:true},
     fr_name: {type:String, required:false},
     class: {type:String, required:true},
-    roll: {type:Number, required:true},
+    roll: {type:String, required:true},
     sec: {type:String, required:false},
     gender: {type:String, required:true},
     address:
@@ -17,7 +17,7 @@ var stud_master=new Schema({
     },
     pincode: {type:String, required:false},
     mobile: {type:Number, required:false},
-    imglocation:{type:String},
+    imglocation: { type: String },
     entrydt:{type:Date, default:Date.now}
 });
 
