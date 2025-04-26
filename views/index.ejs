@@ -14,66 +14,72 @@
       </h1>
     </div>
   </section>
-  <form action="/addstudent/" method="post" class="flex flex-col bg-amber-100 px-4">
-    <input aria-label="Enter student name" type="text" name="stname" placeholder="Student name" required
-      autocomplete="off"
-      class="font-serif text-sm uppercase text-gray-base w-3/4 mt-2 mr-3 py-2 px-4  border  border-gray-200 rounded mb-1" />
-    <input aria-label="Enter father's name" type="text" name="frname" placeholder="Father's name" autocomplete="off"
-      class="text-sm font-serif uppercase text-gray-base w-3/4 mt-2 mr-3 py-2 px-4  border  border-gray-200 rounded mb-1" />
-    <input aria-label="Enter mother's name" type="text" name="mrname" placeholder="Mother's name" autocomplete="off"
-      class="text-sm font-serif uppercase text-gray-base w-3/4 mt-2 mr-3 py-2 px-4  border  border-gray-200 rounded mb-1" />
-    <div class="flex-row">
-      <input aria-label="DOB" type="date" name="stdob" placeholder="Date of Birth" autocomplete="off"
-        class="text-sm font-mono text-blue-900 text-gray-base w-1/4 mt-2 mr-3 py-2 px-4  border  border-gray-200 rounded mb-1" />
-      <input aria-label="Aadhar" type="text" name="staadhar" placeholder="Aadhar number" autocomplete="off" maxlength="12" minlength="12"
-        class="text-sm font-mono text-blue-900 text-gray-base w-1/4 mt-2 mr-3 py-2 px-4  border  border-gray-200 rounded mb-1" />
-      <input aria-label="Mobile" type="number" name="stnumber" placeholder="Mobile number" autocomplete="off"
-        min="5555555555" max="9999999999"
-        class="text-sm font-mono text-blue-900 text-gray-base w-1/4 mt-2 mr-3 py-2 px-4  border  border-gray-200 rounded mb-1" />
-    </div>
-    <div class="flex-row">
-      <input aria-label="Enter roll number" type="text" name="stroll" placeholder="Roll number" required
+  <div class="px-4 sm:px-6 lg:px-8 xl:px-24 max-w-5xl mx-auto w-3/4 bg-amber-100">
+    <form action="/addstudent/" method="post" class="flex flex-col  px-4 rounded-md shadow-md">
+      <input aria-label="Enter student name" type="text" name="stname" placeholder="Student name" required
         autocomplete="off"
-        class="text-sm font-mono w-1/6 text-gray-base mt-2 mr-3 py-2 px-4  border  border-gray-200 rounded mb-1" />
-      <input aria-label="Enter class" type="text" name="stclass" placeholder="Class" required autocomplete="on"
-        class="text-sm font-serif uppercase text-gray-base mt-2 mr-3 w-1/6 py-2 px-4  border  border-gray-200 rounded mb-1"
-        value="" />
-      <input aria-label="Section" type="text" name="stsec" placeholder="Section" autocomplete="on"
-        class="text-sm font-serif uppercase text-gray-base mt-2 mr-3 py-2 px-4  border  border-gray-200 rounded mb-1"
-        value="" />
-      <select name="cmbGender" id="cmbGender" required
-        class="text-sm  mr-3 font-serif  py-2 px-4 border border-gray-200 w-1/6  rounded mb-1">
-        <option value="Male" selected>Male</option>
-        <option value="Female">Female</option>
-      </select>
-    </div>
-    <div class="flex-row">
-      <input aria-label="Address" type="text" name="stadd1" placeholder="Address line1" autocomplete="off"
-        class="text-sm uppercase font-serif text-gray-base mt-2 mr-3 py-3 px-4 w-1/3 border  border-gray-200 rounded mb-1" />
-      <input aria-label="Address" type="text" name="stadd2" placeholder="Address line2" autocomplete="off"
-        class="text-sm font-serif uppercase text-gray-base mt-2 mr-3 py-3 px-4 w-1/3 border  border-gray-200 rounded mb-1" />
-    </div>
-    <div class="flex-row">
-      <input aria-label="Address" type="text" name="stdistrict" placeholder="District" autocomplete="off"
-        class="text-sm font-serif text-gray-base w-1/3 mt-2 mr-3 py-3 px-4  border  border-gray-200 rounded mb-1 uppercase" />
+        class="font-serif text-sm uppercase text-gray-base w-3/4 mt-2 mr-3 py-2 px-4  border  border-gray-300 rounded mb-1" />
+      <input aria-label="Enter father's name" type="text" name="frname" placeholder="Father's name" autocomplete="off"
+        class="text-sm font-serif uppercase text-gray-base w-3/4 mt-2 mr-3 py-2 px-4  border  border-gray-300 rounded mb-1" />
+      <input aria-label="Enter mother's name" type="text" name="mrname" placeholder="Mother's name" autocomplete="off"
+        class="text-sm font-serif uppercase text-gray-base w-3/4 mt-2 mr-3 py-2 px-4  border  border-gray-300 rounded mb-1" />
+      <div class="flex sm:flex-row flex-col">
+        <input aria-label="DOB" type="date" name="stdob" placeholder="Date of Birth" autocomplete="off"
+          class="text-sm font-mono text-blue-900 text-gray-base w-full sm:w-1/3 max-w-[180px] mt-2 mr-3 py-2 px-4 border border-gray-300 rounded mb-1" />
 
-      <input aria-label="Pin" type="number" name="stpin" placeholder="Pin code" autocomplete="on" min="100000"
-        max="999999"
-        class="text-sm font-mono text-blue-900 text-gray-base w-1/3 mt-2 mr-3 py-3 px-4  border  border-gray-200 rounded mb-1" />
-    </div>
-    <div class="mt-4 mb-4">
-      <button id="openCameraBtn" type="button" class="bg-blue-500 text-white px-4 py-2 rounded">Open Camera</button>
-      <button id="clickPhotoBtn" type="button" class="bg-green-500 text-white px-4 py-2 rounded hidden">Take
-        Photo</button>
-      <video id="cameraStream" width="300" autoplay class="mt-2 hidden"></video>
-      <canvas id="canvas" width="300" height="200" class="hidden"></canvas>
-    </div>
+        <input aria-label="Aadhar" type="text" name="staadhar" placeholder="Aadhar number" autocomplete="off"
+          maxlength="12" minlength="12"
+          class="text-sm font-mono text-blue-900 text-gray-base w-full sm:w-1/3 max-w-[180px] mt-2 mr-3 py-2 px-4 border border-gray-300 rounded mb-1" />
 
-    <button type="submit"
-      class="bg-green-400 py-3 w-3/4 mb-10 mr-3 font-serif  rounded-lg hover:bg-green-600 hover:rounded-full text-sm">
-      Submit
-    </button>
-  </form>
+        <input aria-label="Mobile" type="number" name="stnumber" placeholder="Mobile number" autocomplete="off"
+          min="5555555555" max="9999999999"
+          class="text-sm font-mono text-blue-900 text-gray-base w-full sm:w-1/3 max-w-[180px] mt-2 mr-3 py-2 px-4 border border-gray-300 rounded mb-1" />
+      </div>
+
+      <div class="flex sm:flex-row flex-col">
+        <input aria-label="Enter roll number" type="text" name="stroll" placeholder="Roll number" required
+          autocomplete="off"
+          class="text-sm font-mono w-full sm:w-1/6 max-w-[180px] text-gray-base mt-2 mr-3 py-2 px-4  border  border-gray-300 rounded mb-1" />
+        <input aria-label="Enter class" type="text" name="stclass" placeholder="Class" required autocomplete="on"
+          class="text-sm font-serif uppercase text-gray-base mt-2 mr-3 w-full sm:w-1/6 max-w-[180px] py-2 px-4  border  border-gray-300 rounded mb-1"
+          value="" />
+        <input aria-label="Section" type="text" name="stsec" placeholder="Section" autocomplete="on"
+          class="text-sm font-serif uppercase text-gray-base mt-2 mr-3 py-2 px-4 w-full sm:w-1/6 max-w-[180px]  border  border-gray-300 rounded mb-1"
+          value="" />
+        <select name="cmbGender" id="cmbGender" required
+          class="text-sm  mr-3 font-serif  py-2 px-4 border border-gray-300 w-full sm:w-1/6 max-w-[180px]  rounded mb-1">
+          <option value="Male" selected>Male</option>
+          <option value="Female">Female</option>
+        </select>
+      </div>
+      <div class="flex sm:flex-row flex-col">
+        <input aria-label="Address" type="text" name="stadd1" placeholder="Address line1" autocomplete="off"
+          class="text-sm uppercase font-serif text-gray-base mt-2 mr-3 py-3 px-4 w-full sm:w-2/3 max-w-[300px] border  border-gray-300 rounded mb-1" />
+        <input aria-label="Address" type="text" name="stadd2" placeholder="Address line2" autocomplete="off"
+          class="text-sm font-serif uppercase text-gray-base mt-2 mr-3 py-3 px-4 w-full sm:w-2/3 max-w-[300px] border  border-gray-300 rounded mb-1" />
+      </div>
+      <div class="flex sm:flex-row flex-col">
+        <input aria-label="Address" type="text" name="stdistrict" placeholder="District" autocomplete="off"
+          class="text-sm font-serif text-gray-base w-full sm:w-2/3 max-w-[300px] mt-2 mr-3 py-3 px-4  border  border-gray-300 rounded mb-1 uppercase" />
+
+        <input aria-label="Pin" type="number" name="stpin" placeholder="Pin code" autocomplete="on" min="100000"
+          max="999999"
+          class="text-sm font-mono text-blue-900 text-gray-base w-full sm:w-2/3 max-w-[300px] mt-2 mr-3 py-3 px-4  border  border-gray-300 rounded mb-1" />
+      </div>
+      <div class="mt-4 mb-4">
+        <button id="openCameraBtn" type="button" class="bg-blue-500 text-white px-4 py-2 rounded">Open Camera</button>
+        <button id="clickPhotoBtn" type="button" class="bg-green-500 text-white px-4 py-2 rounded hidden">Take
+          Photo</button>
+        <video id="cameraStream" width="300" autoplay class="mt-2 hidden"></video>
+        <canvas id="canvas" width="300" height="200" class="hidden"></canvas>
+      </div>
+
+      <button type="submit"
+        class="bg-green-400 py-3 w-3/4 mb-10 mr-3 font-serif  rounded-lg hover:bg-green-600 hover:rounded-full text-sm">
+        Submit
+      </button>
+    </form>
+  </div>
 
   <%- include('footer'); -%>
 
