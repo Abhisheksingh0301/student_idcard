@@ -21,7 +21,9 @@ router.post('/addstudent/', async (req, res) => {
   const nm = req.body.stname.toUpperCase();
   const rl = req.body.stroll;
   const frnm = req.body.frname.toUpperCase();
+  const mrnm = req.body.mrname.toUpperCase();
   const mob = req.body.stnumber;
+  const db=req.body.stdob;
   const cls = req.body.stclass.toUpperCase();
   const sect = req.body.stsec.toUpperCase();
   const gen = req.body.cmbGender;
@@ -40,6 +42,8 @@ router.post('/addstudent/', async (req, res) => {
         class: cls, roll: rl, sec: sect,
         name: nm,
         fr_name: frnm,
+        mother_name:mrnm,
+        dob:db,
         mobile: mob, gender: gen,
         address: {
           line1: add1,

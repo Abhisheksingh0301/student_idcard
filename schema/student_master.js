@@ -4,6 +4,8 @@ var Schema=mongoose.Schema;
 var stud_master=new Schema({
     name: {type:String, required:true},
     fr_name: {type:String, required:false},
+    mother_name: {type:String, required:false},
+    dob:{type : Date},
     class: {type:String, required:true},
     roll: {type:String, required:true},
     sec: {type:String, required:false},
@@ -17,6 +19,7 @@ var stud_master=new Schema({
     },
     pincode: {type:String, required:false},
     mobile: {type:Number, required:false},
+    aadhar: {type:String, required:false},
     imglocation: { type: String },
     entrydt:{type:Date, default:Date.now}
 });
