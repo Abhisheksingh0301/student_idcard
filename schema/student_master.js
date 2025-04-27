@@ -19,7 +19,7 @@ var stud_master=new Schema({
     },
     pincode: {type:String, required:false},
     mobile: {type:Number, required:false},
-    aadhar: {type:String, required:false},
+    aadhar: {type:String, required:false, default:null},
     imglocation: { type: String },
     entrydt:{type:Date, default:Date.now}
 });

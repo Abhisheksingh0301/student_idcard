@@ -31,6 +31,7 @@ router.post('/addstudent/', async (req, res) => {
   const add2 = req.body.stadd2.toUpperCase();
   const dist = req.body.stdistrict.toUpperCase();
   const pin = req.body.stpin;
+  const adhr = req.body.staadhar;
   try {
     const result = await studMstModel.find({ class: cls, roll: rl, sec: sect }).countDocuments().exec();
     console.log("Total count :::: ", result);
@@ -40,6 +41,7 @@ router.post('/addstudent/', async (req, res) => {
     } else {
       const studData = {
         class: cls, roll: rl, sec: sect,
+        aadhar:adhr,
         name: nm,
         fr_name: frnm,
         mother_name:mrnm,
