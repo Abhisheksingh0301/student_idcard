@@ -63,7 +63,18 @@ router.post('/addstudent/', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 })
+//Display list of Students
+router.get('/display/', async(req,res)=>{
+  try{
+    const studentlist = await studMstModel.find().sort({ class: 1, sec: 1, roll: 1 });
 
+    res.render('display',{ studentlist: studentlist, moment:moment, title : "List of students"});
+  } catch (err) {
+    // Log the error and send an appropriate response
+    console.error('Error retrieving employee list:', err);
+    res.status(500).send('Internal server error');
+  }
+})
 
 // Multer storage setup
 const storage = multer.diskStorage({

@@ -59,7 +59,7 @@ table {
 }
 
 th, td {
-  text-align: left;
+  /* text-align: left; */
   padding: 1px;
   padding-left:4px;
   border: 1px solid blueviolet;
@@ -68,8 +68,8 @@ th, td {
 tr:nth-child(even){background-color: #f2f2f2}
 
 th {
-  background-color: #05b09f;
-  color:#e3ff1c;
+  background-color: #3c8af1;
+  color:#2e0202;
 }
 
 .featured .content-wrapper {

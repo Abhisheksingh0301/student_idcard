@@ -1,0 +1,91 @@
+<title>
+    <%= title %>
+</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+<script src="https://kit.fontawesome.com/00d76a4bef.js" crossorigin="anonymous"></script>
+<link rel='stylesheet' href='/stylesheets/style.css'>
+<script src="/js/jquery.js"></script>
+
+<%- include('header'); -%>
+    <section class="featured">
+        <div class="content-wrapper">
+            <h1 id="myHeader" class="text-4xl">
+                <%= title %>
+            </h1>
+        </div>
+    </section>
+    <div class="h-auto flex flex-col items-center justify-center m-auto pb-20">
+        <% if(studentlist.length>0){ %>
+            <table class="table-auto border">
+                <thead>
+                    <tr>
+                        <th class="py-2 px-2 border-b text-sm">Name</th>
+                        <th class="py-2 px-2 border-b text-sm">Father's name</th>
+                        <th class="py-2 px-2 border-b text-sm">Mother's name</th>
+                        <th class="py-2 px-2 border-b text-sm">Mobile no</th>
+                        <th class="py-2 px-2 border-b text-sm">DOB</th>
+                        <th class="py-2 px-2 border-b text-sm">Class</th>
+                        <th class="py-2 px-2 border-b text-sm">Sec</th>
+                        <th class="py-2 px-2 border-b text-sm">Roll</th>
+                        <th class="py-2 px-2 border-b text-sm">Gender</th>
+                        <th class="py-2 px-2 border-b text-sm">Address</th>
+                        <th class="py-2 px-2 border-b text-sm">Aadhar</th>
+                        <th class="py-2 px-2 border-b text-sm">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="myTable" class="bg-sky-100">
+
+                    <% for (var i=0; i<studentlist.length; i++){ %>
+                        <tr class="hover:bg-sky-200">
+                            <td class="text-sm capitalize">
+                                <%= studentlist[i].name.toLowerCase() %>
+                            </td>
+                            <td class="text-sm capitalize">
+                                <%= studentlist[i].fr_name.toLowerCase() %>
+                            </td>
+                            <td class="text-sm capitalize">
+                                <%= (studentlist[i].mother_name || '').toLowerCase() %>
+                            </td>
+                            <td class="text-sm capitalize">
+                                <%= studentlist[i].mobile %>
+                            </td>
+                            <td class="text-sm capitalize">
+                                <%= moment(studentlist[i].dob).format('DD-MMM-YY') %>
+                            </td>
+                            <td class="text-sm capitalize text-center">
+                                <%= studentlist[i].class %>
+                            </td>
+                            <td class="text-sm capitalize text-center">
+                                <%= studentlist[i].sec %>
+                            </td>
+                            <td class="text-sm capitalize text-center">
+                                <%= studentlist[i].roll %>
+                            </td>
+                            <td class="text-sm capitalize text-center">
+                                <%= studentlist[i].gender %>
+                            </td>
+                            <td class="text-sm capitalize">
+                                <%= studentlist[i].address.line1 %> &nbsp; <%= studentlist[i].address.line2 %>
+                                        &nbsp; <%= studentlist[i].address.district %> &nbsp; <%=
+                                                studentlist[i].address.pin %>
+                            </td>
+                            <td class="text-sm">
+                                <%= studentlist[i].aadhar %>
+                            </td>
+                            <td class="text-sm capitalize text-center">
+                                <a href='/edit-empl/<%= studentlist[i]._id %>'><i class="fa fa-edit"></i></a>
+                            </td>
+                        </tr>
+                        <% } %>
+
+                </tbody>
+            </table>
+            <% } else { %>
+                <h3 style="font:bold;color: darkred;font-family: monospace;">No records found</h3>
+                <% } %>
+
+    </div>
+
+
+
+    <%- include('footer'); -%>
