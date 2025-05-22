@@ -1,5 +1,5 @@
 body {
-  padding: 50px;
+  padding: 40px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   /* background-image: url('img_girl.jpg'); */
 }
@@ -14,7 +14,7 @@ body {
 #myHeader {
   /* background-color: lightblue; */
   color: #8b00fb;
-  padding: 15px;
+  padding: 6px;
   text-align: center;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
@@ -55,20 +55,20 @@ a {
 
 table {
   border-collapse: collapse;
-  width: 80%;
+  width: 90%;
 }
 
 th, td {
   /* text-align: left; */
   padding: 1px;
-  padding-left:4px;
+  padding-left:2px;
   border: 1px solid blueviolet;
 }
 
 tr:nth-child(even){background-color: #f2f2f2}
 
 th {
-  background-color: #3c8af1;
+  background-color: #bce4a1;
   color:#2e0202;
 }
 
@@ -86,14 +86,14 @@ th {
   background-image: linear-gradient(to bottom,orange, #fff , green);
   color: #3e5667;
   /*padding: 20px 40px 30px 40px;*/
-  padding:10px 0px 10px 10px;
+  /* padding:10px 0px 10px 10px; */
 }
 
 /* Style the header with a grey background and some padding */
 .header {
   overflow: hidden;
   background-color:#4543e6;
-  padding: 10px 10px;
+  padding: 6px 6px;
 }
 
 /* Style the header links */
