@@ -125,7 +125,7 @@ router.post("/updatestudent/", authMiddleware, async (req, res) => {
 
   try {
     await studMstModel.findByIdAndUpdate(req.body.id, studData).exec();
-    res.redirect('../emplist');
+    res.redirect('../display');
   } catch (err) {
     console.log('Error:', err);
     res.status(500).send('Internal Server Error');
