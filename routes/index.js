@@ -23,7 +23,7 @@ router.post('/addstudent/', async (req, res) => {
   const frnm = req.body.frname.toUpperCase();
   const mrnm = req.body.mrname.toUpperCase();
   const mob = req.body.stnumber;
-  const db=req.body.stdob;
+  const db = req.body.stdob;
   const cls = req.body.stclass.toUpperCase();
   const sect = req.body.stsec.toUpperCase();
   const gen = req.body.cmbGender;
@@ -41,11 +41,11 @@ router.post('/addstudent/', async (req, res) => {
     } else {
       const studData = {
         class: cls, roll: rl, sec: sect,
-        aadhar:adhr,
+        aadhar: adhr,
         name: nm,
         fr_name: frnm,
-        mother_name:mrnm,
-        dob:db,
+        mother_name: mrnm,
+        dob: db,
         mobile: mob, gender: gen,
         address: {
           line1: add1,
@@ -64,17 +64,73 @@ router.post('/addstudent/', async (req, res) => {
   }
 })
 //Display list of Students
-router.get('/display/', async(req,res)=>{
-  try{
+router.get('/display/', async (req, res) => {
+  try {
     const studentlist = await studMstModel.find().sort({ class: 1, sec: 1, roll: 1 });
 
-    res.render('display',{ studentlist: studentlist, moment:moment, title : "List of students"});
+    res.render('display', { studentlist: studentlist, moment: moment, title: "List of students" });
   } catch (err) {
     // Log the error and send an appropriate response
     console.error('Error retrieving employee list:', err);
     res.status(500).send('Internal server error');
   }
 })
+
+//Edit records get method
+router.get('/edit-stud/:id', async (req, res) => {
+  var id = req.params.id;
+  //var edit= studMstModel.findById(id);
+  try {
+    const data = await studMstModel.findById(id).exec();
+    res.render('edit-stud', { studentdata: data, title: "Edit student data" });
+  } catch (err) {
+    next(err);
+  }
+});
+
+
+//Edit POST method
+
+router.post("/updatestudent/", authMiddleware, async (req, res) => {
+  const nm = req.body.stname.toUpperCase();
+  const rl = req.body.stroll;
+  const frnm = req.body.frname.toUpperCase();
+  const mrnm = req.body.mrname.toUpperCase();
+  const mob = req.body.stnumber;
+  const db = req.body.stdob;
+  const cls = req.body.stclass.toUpperCase();
+  const sect = req.body.stsec.toUpperCase();
+  const gen = req.body.cmbGender;
+  const add1 = req.body.stadd1.toUpperCase();
+  const add2 = req.body.stadd2.toUpperCase();
+  const dist = req.body.stdistrict.toUpperCase();
+  const pin = req.body.stpin;
+  const adhr = req.body.staadhar;
+
+  const studData = {
+    class: cls, roll: rl, sec: sect,
+    aadhar: adhr,
+    name: nm,
+    fr_name: frnm,
+    mother_name: mrnm,
+    dob: db,
+    mobile: mob, gender: gen,
+    address: {
+      line1: add1,
+      line2: add2,
+      district: dist,
+      pin: pin
+    }
+  };
+
+  try {
+    await studMstModel.findByIdAndUpdate(req.body.id, studData).exec();
+    res.redirect('../emplist');
+  } catch (err) {
+    console.log('Error:', err);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 // Multer storage setup
 const storage = multer.diskStorage({

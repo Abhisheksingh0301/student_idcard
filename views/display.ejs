@@ -69,11 +69,9 @@
                                         &nbsp; <%= studentlist[i].address.district %> &nbsp; <%=
                                                 studentlist[i].address.pin %>
                             </td>
-                            <td class="text-sm">
-                                <%= studentlist[i].aadhar %>
-                            </td>
                             <td class="text-sm capitalize text-center">
-                                <a href='/edit-empl/<%= studentlist[i]._id %>'><i class="fa fa-edit"></i></a>
+                                <a href='/edit-stud/<%= studentlist[i]._id %>'><i class="fa fa-edit"></i></a>
+                                <a href='/delete-stud/<%= studentlist[i]._id %>'><i class="fa fa-delete"></i></a>
                             </td>
                         </tr>
                         <% } %>
