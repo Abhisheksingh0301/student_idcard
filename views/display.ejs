@@ -77,6 +77,11 @@
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </form>
+                                <button
+                                    onclick="captureAndUpload('<%= studentlist[i].class %>', '<%= studentlist[i].sec %>', '<%= studentlist[i].roll %>')"
+                                    style="background:none;border:none;color:green;cursor:pointer;">
+                                    <i class="fa fa-camera"></i>
+                                </button>
                             </td>
                         </tr>
                         <% } %>
@@ -92,3 +97,33 @@
 
 
     <%- include('footer'); -%>
+
+    <script>
+function captureAndUpload(cls, sec, roll) {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.capture = 'environment';
+
+    input.onchange = async function () {
+        const file = input.files[0];
+        if (!file) return;
+
+        const filename = `${cls}${sec}${roll}.jpg`.toUpperCase();
+        const renamedFile = new File([file], filename, { type: file.type });
+
+        const formData = new FormData();
+        formData.append('photo', renamedFile);
+
+        const res = await fetch('/uploadphoto', {
+            method: 'POST',
+            body: formData
+        });
+
+        const text = await res.text();
+        alert(text);
+    };
+
+    input.click();
+}
+</script>

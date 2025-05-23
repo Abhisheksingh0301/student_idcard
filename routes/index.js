@@ -181,6 +181,7 @@ router.post('/uploadphoto', upload.single('photo'), async (req, res) => {
     console.log("Before update:", student);
 
     student.imglocation = imageName;
+    //student.imglocation = `upload/${imageName}`;
     await student.save();
 
     const updated = await studMstModel.findById(student._id);
