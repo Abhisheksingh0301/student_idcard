@@ -1,6 +1,7 @@
 var express = require("express");
 var os = require('os');
 var studMstModel = require("../schema/student_master");
+var clsMstModel = require("../schema/class_master");
 var moment = require('moment');
 var router = express.Router();
 const multer = require('multer');
@@ -11,21 +12,28 @@ const fs = require('fs');
 const uploadDir = path.join(__dirname, '../public/upload');
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 /* GET home page. */
-router.get('/', function (req, res, next) {
-  res.render('index', { title: 'Home', class: '', sec: '' });
+router.get('/', async (req, res, next) => {
+  try {
+    const clsdata = await clsMstModel.find().sort({ class_order: 1 });
+    res.render('index', { title: 'Home', classdata: clsdata, sec: '' });
+  } catch (err) {
+    console.log('Error:', err);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 /* POST METHOD OF STUDENT ENTRY*/
 router.post('/addstudent/', async (req, res) => {
   // const nm = (req.body.stname);
+  const clsdata = await clsMstModel.find().sort({ class_order: 1 });
   const nm = req.body.stname.toUpperCase();
   const rl = req.body.stroll;
   const frnm = req.body.frname.toUpperCase();
   const mrnm = req.body.mrname.toUpperCase();
   const mob = req.body.stnumber;
   const db = req.body.stdob;
-  const cls = req.body.stclass.toUpperCase();
-  const sect = req.body.stsec.toUpperCase();
+  const cls = req.body.stclass;
+  const sect = req.body.stsec;
   const gen = req.body.cmbGender;
   const add1 = req.body.stadd1.toUpperCase();
   const add2 = req.body.stadd2.toUpperCase();
@@ -56,11 +64,11 @@ router.post('/addstudent/', async (req, res) => {
       }
       var data = new studMstModel(studData);
       await data.save();
-      res.render('index', { title: 'Home', class: cls, sec: sect });
+      res.render('index', { title: 'Home', class: cls,classdata:clsdata, sec: sect });
     }
   } catch (err) {
     console.log('Error:', err);
-    res.status(500).send('Internal Server Error');
+    //res.status(500).send('Internal Server Error');
   }
 })
 //Display list of Students
@@ -93,7 +101,7 @@ router.post("/delete-stud/:id", async (req, res) => {
   var id = req.params.id;
   try {
     const data = await studMstModel.findByIdAndDelete(id).exec();
-     res.redirect('../display');
+    res.redirect('../display');
   } catch (err) {
     console.log(err);
     res.status(500).send('Internal Server Error');
@@ -160,32 +168,33 @@ const upload = multer({ storage: storage });
 router.post('/uploadphoto', upload.single('photo'), async (req, res) => {
   const imageName = req.file.filename;
   const fileBase = path.parse(imageName).name;
+console.log(imageName);
+  //const match = fileBase.match(/^([A-Z]+)([A-Z])(\d+)$/);
+  const match = fileBase.match(/^([A-Z0-9]+)_([A-Z])_(\d+)$/);
 
-  const match = fileBase.match(/^([A-Z]+)([A-Z])(\d+)$/);
   if (!match) {
-    return res.status(400).send('Invalid filename format. Expected CLASSSECTIONROLL.jpg');
+    return res.status(400).send('Invalid filename format. Expected CLASS_SEC_ROLL.jpg');
   }
-
-  const cls = match[1].trim().toUpperCase();
-  const sec = match[2].trim().toUpperCase();
-  const roll = match[3].trim(); // "52"
-
+  const cls = match[1];  // e.g. "II"
+  const sec = match[2];  // e.g. "B"
+  const roll = match[3]; // e.g. "66"
+  console.log(cls, sec, roll);
   try {
     const student = await studMstModel.findOne({ class: cls, sec: sec, roll: roll });
-
+    //console.log(student);
     if (!student) {
       console.log(`Student not found with: ${cls} ${sec} ${roll}`);
       return res.status(404).send('Student not found to update image.');
     }
 
-    console.log("Before update:", student);
+    //console.log("Before update:", student);
 
     student.imglocation = imageName;
     //student.imglocation = `upload/${imageName}`;
     await student.save();
 
     const updated = await studMstModel.findById(student._id);
-    console.log("After update:", updated);
+    //console.log("After update:", updated);
 
     res.send('Image uploaded and student updated successfully.');
   } catch (err) {

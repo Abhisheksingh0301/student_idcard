@@ -29,6 +29,8 @@
                         <th class="py-2 px-2 border-b text-sm">Roll</th>
                         <th class="py-2 px-2 border-b text-sm">Gender</th>
                         <th class="py-2 px-2 border-b text-sm">Address</th>
+                        <th class="py-2 px-2 border-b text-sm">imglocation</th>
+                        <th class="py-2 px-2 border-b text-sm">Photo</th>
                         <th class="py-2 px-2 border-b text-sm">Actions</th>
                     </tr>
                 </thead>
@@ -69,6 +71,14 @@
                                                 studentlist[i].address.pin %>
                             </td>
                             <td class="text-sm capitalize text-center">
+                                <%= studentlist[i].imglocation %>
+                            </td>
+                            <td>
+                                <img src="/upload/<%= studentlist[i].imglocation %>" alt="No img" width="40px"
+                                    height="40px">
+
+                            </td>
+                            <td class="text-sm capitalize text-center">
                                 <a href='/edit-stud/<%= studentlist[i]._id %>'><i class="fa fa-edit"></i></a>
                                 <form action="/delete-stud/<%= studentlist[i]._id %>" method="POST"
                                     style="display:inline;"
@@ -98,32 +108,35 @@
 
     <%- include('footer'); -%>
 
-    <script>
-function captureAndUpload(cls, sec, roll) {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.capture = 'environment';
+        <script>
+            function captureAndUpload(cls, sec, roll) {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                input.capture = 'environment';
 
-    input.onchange = async function () {
-        const file = input.files[0];
-        if (!file) return;
+                input.onchange = async function () {
+                    const file = input.files[0];
+                    if (!file) return;
 
-        const filename = `${cls}${sec}${roll}.jpg`.toUpperCase();
-        const renamedFile = new File([file], filename, { type: file.type });
+                    //const filename = `${cls}${sec}${roll}.jpg`.toUpperCase();
+                    const filename = `${cls}_${sec}_${roll}.jpg`.toUpperCase(); // e.g. II_B_66.JPG
 
-        const formData = new FormData();
-        formData.append('photo', renamedFile);
+                    const renamedFile = new File([file], filename, { type: file.type });
 
-        const res = await fetch('/uploadphoto', {
-            method: 'POST',
-            body: formData
-        });
+                    const formData = new FormData();
+                    formData.append('photo', renamedFile);
 
-        const text = await res.text();
-        alert(text);
-    };
+                    const res = await fetch('/uploadphoto', {
+                        method: 'POST',
+                        body: formData
+                    });
 
-    input.click();
-}
-</script>
+                    const text = await res.text();
+                    alert(text);
+                     window.location.reload(); 
+                };
+
+                input.click();
+            }
+        </script>

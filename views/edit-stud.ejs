@@ -17,7 +17,7 @@
 
   <div class="px-4 sm:px-6 lg:px-8 xl:px-24 max-w-5xl mx-auto w-3/4 bg-orange-100">
     <form action="/updatestudent/" method="post" class="flex flex-col  px-4 rounded-md shadow-md">
-       <input type="hidden" name="id"  value="<%= sdata._id %>">
+      <input type="hidden" name="id" value="<%= sdata._id %>">
       <input aria-label="Enter student name" type="text" name="stname" placeholder="Student name" required
         autocomplete="off" value="<%= sdata.name %>"
         class="font-serif text-sm uppercase text-gray-base w-3/4 mt-2 mr-3 py-2 px-4  border  border-gray-300 rounded mb-1" />
@@ -45,12 +45,26 @@
         <input aria-label="Enter roll number" type="text" name="stroll" placeholder="Roll number" required
           autocomplete="off" value="<%= sdata.roll %>"
           class="text-sm font-mono w-full sm:w-1/6 max-w-[180px] text-gray-base mt-2 mr-3 py-2 px-4  border  border-gray-300 rounded mb-1" />
-        <input aria-label="Enter class" type="text" name="stclass" placeholder="Class" required autocomplete="on"
-          class="text-sm font-serif uppercase text-gray-base mt-2 mr-3 w-full sm:w-1/6 max-w-[180px] py-2 px-4  border  border-gray-300 rounded mb-1"
-          value="<%= sdata.class %>" />
-        <input aria-label="Section" type="text" name="stsec" placeholder="Section" autocomplete="on"
-          class="text-sm font-serif uppercase text-gray-base mt-2 mr-3 py-2 px-4 w-full sm:w-1/6 max-w-[180px]  border  border-gray-300 rounded mb-1"
-          value="<%= sdata.sec %>" />
+        <select id="stclass" name="stclass" required
+          class="text-sm  mr-3 font-serif  py-2 px-4 border border-gray-300 w-full sm:w-1/5 max-w-[180px]  rounded mb-1">
+          <option value="0"> Please select</option>
+          <% for (var i=0; i<classdata.length; i++){ %>
+            <option value='<%= classdata[i].class %>'>
+              <%= class_masters[i].class %>
+            </option>
+            <option value='<%= classdata[i].class %>' <% if(sdata.class==classdata[i].class){ %> selected <% } %>>
+                <%= classdata[i].class %>
+            </option>
+            <% } %>
+        </select>
+        <select id="stsec" name="stsec"
+          class="text-sm  mr-3 font-serif  py-2 px-4 border border-gray-300 w-full sm:w-1/5 max-w-[180px]  rounded mb-1">
+          <option value="" <% if(sdata.sec=="" ){ %> selected <% } %> disabled selected hidden>No section</option>
+          <option value="A" <% if(sdata.sec=="A" ){ %> selected <% } %>>A</option>
+          <option value="B" <% if(sdata.sec=="B" ){ %> selected <% } %>>B</option>
+          <option value="C" <% if(sdata.sec=="C" ){ %> selected <% } %>>C</option>
+        </select>
+
         <select name="cmbGender" id="cmbGender" required
           class="text-sm  mr-3 font-serif  py-2 px-4 border border-gray-300 w-full sm:w-1/6 max-w-[180px]  rounded mb-1">
           <option value="Male" <% if(sdata.gender=="Male" ){ %> selected <% } %>>
