@@ -45,7 +45,7 @@
 
         <select id="stclass" name="stclass" required
           class="text-sm  mr-3 font-serif  py-2 px-4 border border-gray-300 w-full sm:w-1/5 max-w-[180px]  rounded mb-1">
-          <option value="0"> Please select</option>
+          <option value=""> Please select</option>
           <% for (var i=0; i<classdata.length; i++){ %>
             <option value='<%= classdata[i].class %>'>
               <%= classdata[i].class %>
@@ -79,13 +79,13 @@
           max="999999"
           class="text-sm font-mono text-blue-900 text-gray-base w-full sm:w-2/3 max-w-[300px] mt-2 mr-3 py-3 px-4  border  border-gray-300 rounded mb-1" />
       </div>
-      <div class="mt-4 mb-4">
+      <!-- <div class="mt-4 mb-4">
         <button id="openCameraBtn" type="button" class="bg-blue-500 text-white px-4 py-2 rounded">Open Camera</button>
         <button id="clickPhotoBtn" type="button" class="bg-green-500 text-white px-4 py-2 rounded hidden">Take
           Photo</button>
         <video id="cameraStream" width="300" autoplay class="mt-2 hidden"></video>
         <canvas id="canvas" width="300" height="200" class="hidden"></canvas>
-      </div>
+      </div> -->
 
       <button type="submit"
         class="bg-green-400 py-3 w-3/4 mb-10 mr-3 font-serif  rounded-lg hover:bg-green-600 hover:rounded-full text-sm">
@@ -96,7 +96,7 @@
 
   <%- include('footer'); -%>
 
-    <script>
+    <!-- <script>
       const openCameraBtn = document.getElementById('openCameraBtn');
       const clickPhotoBtn = document.getElementById('clickPhotoBtn');
       const video = document.getElementById('cameraStream');
@@ -155,4 +155,4 @@
             alert('Error uploading photo');
           });
       });
-    </script>
+    </script> -->
