@@ -45,7 +45,7 @@ router.post('/addstudent/', async (req, res) => {
     console.log("Total count :::: ", result);
     if (result > 0) {
       console.log("Duplicate record");
-      res.render('error', { message: 'Duplicate record' })
+      res.render('msgpage', { message: 'Duplicate record' })
     } else {
       const studData = {
         class: cls, roll: rl, sec: sect,
@@ -113,9 +113,9 @@ router.post("/delete-stud/:id", async (req, res) => {
 router.post("/updatestudent/", async (req, res) => {
   try {
     const studData = {
-      class: req.body.stclass.toUpperCase(),
+      class: req.body.stclass,
       roll: req.body.stroll,
-      sec: req.body.stsec.toUpperCase(),
+      sec: req.body.stsec,
       aadhar: req.body.staadhar,
       name: req.body.stname.toUpperCase(),
       fr_name: req.body.frname.toUpperCase(),
@@ -202,8 +202,6 @@ console.log(imageName);
     res.status(500).send('Error updating student image.');
   }
 });
-
-
 
 
 module.exports = router;
