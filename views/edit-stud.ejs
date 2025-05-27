@@ -50,7 +50,7 @@
           <option value="0"> Please select</option>
           <% for (var i=0; i<classdata.length; i++){ %>
             <option value='<%= classdata[i].class %>'>
-              <%= class_masters[i].class %>
+              <%= classdata[i].class %>
             </option>
             <option value='<%= classdata[i].class %>' <% if(sdata.class==classdata[i].class){ %> selected <% } %>>
                 <%= classdata[i].class %>

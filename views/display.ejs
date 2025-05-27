@@ -15,13 +15,42 @@
         </div>
     </section>
     <div class="h-auto flex flex-col items-center justify-center m-auto pb-20">
+        <form method="GET" action="/display" class="flex flex-col sm:flex-row gap-4 items-center justify-center my-6">
+            <select name="class" class="border border-gray-300 rounded px-4 py-2 text-sm">
+                <option value="">-- Select Class --</option>
+                <% const uniqueClasses=[...new Set(studentlist.map(s=> s.class))];
+                    uniqueClasses.forEach(c => {
+                    %>
+                    <option value="<%= c %>" <%=(c===selectedClass ? "selected" : "" ) %>><%= c %>
+                    </option>
+                    <% }); %>
+            </select>
+
+            <select name="sec" class="border border-gray-300 rounded px-4 py-2 text-sm">
+                <option value="">-- Select Section --</option>
+                <% const uniqueSecs=[...new Set(studentlist.map(s=> s.sec))];
+                    uniqueSecs.forEach(s => {
+                    %>
+                    <option value="<%= s %>" <%=(s===selectedSec ? "selected" : "" ) %>><%= s %>
+                    </option>
+                    <% }); %>
+            </select>
+
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-sm">
+                Filter
+            </button>
+            <!-- 🔍 Live Search Textbox -->
+            <input type="text" id="liveSearchInput" class="border border-gray-300 rounded px-4 py-2 text-sm"
+                placeholder="Search by anything ..." onkeyup="liveSearchTable()" />
+        </form>
+        </form>
+
         <% if(studentlist.length>0){ %>
             <table class="table-auto border">
                 <thead>
                     <tr>
                         <th class="py-2 px-2 border-b text-sm">Name</th>
-                        <th class="py-2 px-2 border-b text-sm">Father's name</th>
-                        <th class="py-2 px-2 border-b text-sm">Mother's name</th>
+                        <th class="py-2 px-2 border-b text-sm">Father's name <br> Mother's name</th>
                         <th class="py-2 px-2 border-b text-sm">Mobile no</th>
                         <th class="py-2 px-2 border-b text-sm">DOB</th>
                         <th class="py-2 px-2 border-b text-sm">Class</th>
@@ -29,7 +58,6 @@
                         <th class="py-2 px-2 border-b text-sm">Roll</th>
                         <th class="py-2 px-2 border-b text-sm">Gender</th>
                         <th class="py-2 px-2 border-b text-sm">Address</th>
-                        <th class="py-2 px-2 border-b text-sm">imglocation</th>
                         <th class="py-2 px-2 border-b text-sm">Photo</th>
                         <th class="py-2 px-2 border-b text-sm">Actions</th>
                     </tr>
@@ -42,16 +70,18 @@
                                 <%= studentlist[i].name.toLowerCase() %>
                             </td>
                             <td class="text-sm capitalize">
-                                <%= studentlist[i].fr_name.toLowerCase() %>
-                            </td>
-                            <td class="text-sm capitalize">
-                                <%= (studentlist[i].mother_name || '' ).toLowerCase() %>
+                                <span class="text-blue-800">
+                                    <%= studentlist[i].fr_name.toLowerCase() %>
+                                </span> <br>
+                                <span class="text-green-800">
+                                    <%= (studentlist[i].mother_name || '' ).toLowerCase() %>
+                                </span>
                             </td>
                             <td class="text-sm capitalize">
                                 <%= studentlist[i].mobile %>
                             </td>
                             <td class="text-sm capitalize">
-                                <%= moment(studentlist[i].dob).format('DD-MMM-YY') %>
+                                <%= moment(studentlist[i].dob).format('DD-MM-YY') %>
                             </td>
                             <td class="text-sm capitalize text-center">
                                 <%= studentlist[i].class %>
@@ -66,12 +96,8 @@
                                 <%= studentlist[i].gender %>
                             </td>
                             <td class="text-sm capitalize">
-                                <%= studentlist[i].address.line1 %> &nbsp; <%= studentlist[i].address.line2 %>
-                                        &nbsp; <%= studentlist[i].address.district %> &nbsp; <%=
-                                                studentlist[i].address.pin %>
-                            </td>
-                            <td class="text-sm capitalize text-center">
-                                <%= studentlist[i].imglocation %>
+                                <%= studentlist[i].address.line1 %> &nbsp; <%= studentlist[i].address.line2 %> <br>
+                                        <%= studentlist[i].address.district %> &nbsp; <%= studentlist[i].address.pin %>
                             </td>
                             <td>
                                 <img src="/upload/<%= studentlist[i].imglocation %>" alt="No img" width="40px"
@@ -79,19 +105,22 @@
 
                             </td>
                             <td class="text-sm capitalize text-center">
-                                <a href='/edit-stud/<%= studentlist[i]._id %>'><i class="fa fa-edit"></i></a>
-                                <form action="/delete-stud/<%= studentlist[i]._id %>" method="POST"
-                                    style="display:inline;"
-                                    onsubmit="return confirm('Are you sure you want to delete this student?');">
-                                    <button type="submit" style="background:none;border:none;color:red;cursor:pointer;">
-                                        <i class="fa fa-trash"></i>
+                                <div class="flex flex-col sm:flex-row items-center justify-center gap-1">
+                                    <a href='/edit-stud/<%= studentlist[i]._id %>'><i class="fa fa-edit"></i></a>
+                                    <form action="/delete-stud/<%= studentlist[i]._id %>" method="POST"
+                                        style="display:inline;"
+                                        onsubmit="return confirm('Are you sure you want to delete this student?');">
+                                        <button type="submit"
+                                            style="background:none;border:none;color:red;cursor:pointer;">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </form>
+                                    <button
+                                        onclick="captureAndUpload('<%= studentlist[i].class %>', '<%= studentlist[i].sec %>', '<%= studentlist[i].roll %>')"
+                                        style="background:none;border:none;color:green;cursor:pointer;">
+                                        <i class="fa fa-camera"></i>
                                     </button>
-                                </form>
-                                <button
-                                    onclick="captureAndUpload('<%= studentlist[i].class %>', '<%= studentlist[i].sec %>', '<%= studentlist[i].roll %>')"
-                                    style="background:none;border:none;color:green;cursor:pointer;">
-                                    <i class="fa fa-camera"></i>
-                                </button>
+                                </div>
                             </td>
                         </tr>
                         <% } %>
@@ -134,9 +163,24 @@
 
                     const text = await res.text();
                     alert(text);
-                     window.location.reload(); 
+                    window.location.reload();
                 };
 
                 input.click();
+            }
+
+            function liveSearchTable() {
+                const input = document.getElementById('liveSearchInput');
+                const filter = input.value.toLowerCase();
+                const rows = document.querySelectorAll("#myTable tr");
+
+                rows.forEach(row => {
+                    const text = row.innerText.toLowerCase();
+                    if (text.includes(filter)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
             }
         </script>

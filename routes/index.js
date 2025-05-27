@@ -64,7 +64,7 @@ router.post('/addstudent/', async (req, res) => {
       }
       var data = new studMstModel(studData);
       await data.save();
-      res.render('index', { title: 'Home', class: cls,classdata:clsdata, sec: sect });
+      res.render('index', { title: 'Home', class: cls, classdata: clsdata, sec: sect });
     }
   } catch (err) {
     console.log('Error:', err);
@@ -72,17 +72,61 @@ router.post('/addstudent/', async (req, res) => {
   }
 })
 //Display list of Students
-router.get('/display/', async (req, res) => {
-  try {
-    const studentlist = await studMstModel.find().sort({ class: 1, sec: 1, roll: 1 });
 
-    res.render('display', { studentlist: studentlist, moment: moment, title: "List of students" });
+router.get('/display/', async (req, res) => {
+  const { class: cls, sec } = req.query;
+
+  const matchStage = {};
+  if (cls) matchStage.class = cls;
+  if (sec) matchStage.sec = sec;
+
+  try {
+    const students = await studMstModel.aggregate([
+      { $match: matchStage }, // ⬅️ Apply filters here
+
+      {
+        $lookup: {
+          from: 'class_masters',
+          localField: 'class',
+          foreignField: 'class',
+          as: 'class_info'
+        }
+      },
+      {
+        $unwind: {
+          path: '$class_info',
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $sort: {
+          'class_info.class_order': 1,
+          sec: 1,
+          roll: 1
+        }
+      }
+    ]);
+
+    // Optional: Fetch distinct class/sec for dropdowns
+    const allStudents = await studMstModel.find(); // simple query, no sort needed
+    const uniqueClasses = [...new Set(allStudents.map(s => s.class))].sort();
+    const uniqueSecs = [...new Set(allStudents.map(s => s.sec))].sort();
+
+    res.render('display', {
+      studentlist: students,
+      moment,
+      title: "List of students",
+      selectedClass: cls || '',
+      selectedSec: sec || '',
+      uniqueClasses,
+      uniqueSecs
+    });
   } catch (err) {
-    // Log the error and send an appropriate response
-    console.error('Error retrieving employee list:', err);
+    console.error('Error retrieving student list:', err);
     res.status(500).send('Internal server error');
-  }
-})
+  }  //fuse.js -> to implement search ramu as rammu
+});
+
 
 //Edit records get method
 router.get('/edit-stud/:id', async (req, res) => {
@@ -90,7 +134,8 @@ router.get('/edit-stud/:id', async (req, res) => {
   //var edit= studMstModel.findById(id);
   try {
     const data = await studMstModel.findById(id).exec();
-    res.render('edit-stud', { sdata: data, moment: moment, title: "Edit student data" });
+    const clsdata = await clsMstModel.find().sort({ class_order: 1 });
+    res.render('edit-stud', { sdata: data, classdata: clsdata, moment: moment, title: "Edit student data" });
   } catch (err) {
     next(err);
   }
@@ -168,9 +213,10 @@ const upload = multer({ storage: storage });
 router.post('/uploadphoto', upload.single('photo'), async (req, res) => {
   const imageName = req.file.filename;
   const fileBase = path.parse(imageName).name;
-console.log(imageName);
+  console.log(imageName);
   //const match = fileBase.match(/^([A-Z]+)([A-Z])(\d+)$/);
-  const match = fileBase.match(/^([A-Z0-9]+)_([A-Z])_(\d+)$/);
+  //const match = fileBase.match(/^([A-Z0-9]+)_([A-Z])_(\d+)$/);
+  const match = fileBase.match(/^([A-Z0-9]+)_?([A-Z]?)_(\d+)$/);
 
   if (!match) {
     return res.status(400).send('Invalid filename format. Expected CLASS_SEC_ROLL.jpg');
@@ -178,9 +224,14 @@ console.log(imageName);
   const cls = match[1];  // e.g. "II"
   const sec = match[2];  // e.g. "B"
   const roll = match[3]; // e.g. "66"
-  console.log(cls, sec, roll);
+  console.log(cls, sec === "" ? "[no section]" : sec, roll);
   try {
-    const student = await studMstModel.findOne({ class: cls, sec: sec, roll: roll });
+    const query = { class: cls, roll: roll };
+    if (sec !== "") query.sec = sec; // only add 'sec' to query if it's not empty
+
+    const student = await studMstModel.findOne(query);
+
+    //const student = await studMstModel.findOne({ class: cls, sec: sec, roll: roll });
     //console.log(student);
     if (!student) {
       console.log(`Student not found with: ${cls} ${sec} ${roll}`);
