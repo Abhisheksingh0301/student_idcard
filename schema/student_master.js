@@ -17,7 +17,6 @@ var stud_master=new Schema({
         district:String,
         pin:Number
     },
-    pincode: {type:String, required:false},
     mobile: {type:Number, required:false},
     aadhar: {type:String, required:false, default:null},
     imglocation: { type: String },

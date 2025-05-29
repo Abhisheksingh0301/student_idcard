@@ -7,6 +7,7 @@ var router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const csv = require('csv-parser');
 
 // Create upload folder if it doesn't exist
 const uploadDir = path.join(__dirname, '../public/upload');
@@ -254,5 +255,49 @@ router.post('/uploadphoto', upload.single('photo'), async (req, res) => {
   }
 });
 
+
+// 📥 POST route to handle CSV upload
+router.post('/upload', upload.single('csvfile'), (req, res) => {
+  const results = [];
+
+  fs.createReadStream(req.file.path)
+    .pipe(csv())
+    .on('data', (row) => {
+      // 🔄 Convert and map row to schema structure
+      results.push({
+        name: row.name?.toUpperCase(),
+        fr_name: row.fr_name?.toUpperCase(),
+        mother_name: row.mother_name?.toUpperCase(),
+        dob: row.dob ? new Date(row.dob) : null,
+        class: row.class?.toUpperCase(),
+        roll: row.roll,
+        sec: row.sec?.toUpperCase(),
+        gender: row.gender
+          ? row.gender.charAt(0).toUpperCase() + row.gender.slice(1).toLowerCase()
+          : null,
+        address: {
+          line1: row['address.line1']?.toUpperCase(),
+          line2: row['address.line2']?.toUpperCase(),
+          district: row['address.district']?.toUpperCase(),
+          pin: parseInt(row['address.pin']) || null
+        },
+        pincode: row.pincode,
+        mobile: row.mobile ? parseInt(row.mobile) : null,
+        aadhar: row.aadhar || null,
+        imglocation: row.imglocation,
+        entrydt: new Date()
+      });
+    })
+    .on('end', async () => {
+      try {
+        await studMstModel.insertMany(results);
+        fs.unlinkSync(req.file.path); // clean up uploaded file
+        res.redirect('/'); // or res.send('Upload successful')
+      } catch (error) {
+        console.error(error);
+        res.status(500).send('Error uploading CSV: ' + error.message);
+      }
+    });
+});
 
 module.exports = router;
