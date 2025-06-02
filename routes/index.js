@@ -8,6 +8,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const csv = require('csv-parser');
+const { Parser } = require('json2csv');
 
 // Create upload folder if it doesn't exist
 const uploadDir = path.join(__dirname, '../public/upload');
@@ -298,6 +299,39 @@ router.post('/upload', upload.single('csvfile'), (req, res) => {
         res.status(500).send('Error uploading CSV: ' + error.message);
       }
     });
+});
+
+//To download all the data
+router.get('/download', async (req, res) => {
+  try {
+    const students = await studMstModel.find().lean(); // get all records
+
+    const formattedStudents = students.map((student) => ({
+      ...student,
+      dob: student.dob
+        ? new Date(student.dob).toISOString().split('T')[0] // Format: YYYY-MM-DD
+        : '',
+      entrydt: student.entrydt
+        ? new Date(student.entrydt).toISOString().split('T')[0]
+        : ''
+    }));
+
+    const fields = [
+      'name', 'fr_name', 'mother_name', 'dob', 'class', 'roll', 'sec',
+      'gender', 'address.line1', 'address.line2', 'address.district', 'address.pin',
+      'pincode', 'mobile', 'aadhar', 'imglocation', 'entrydt'
+    ];
+
+    const parser = new Parser({ fields });
+    const csv = parser.parse(formattedStudents);
+
+    res.header('Content-Type', 'text/csv');
+    res.attachment('students.csv');
+    return res.send(csv);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error generating CSV');
+  }
 });
 
 module.exports = router;
