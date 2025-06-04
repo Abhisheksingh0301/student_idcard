@@ -62,41 +62,41 @@
         <% if (studentlist.length> 0) { %>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full px-4">
                 <% studentlist.forEach(student=> { %>
-                    <div class="bg-white shadow-md rounded-lg p-4 border border-gray-200 flex flex-col justify-between">
-                        <!-- Header: Name + Photo -->
-                        <div class="flex justify-between items-center mb-3">
-                            <h2 class="text-lg font-semibold capitalize text-blue-800">
+                    <div class="bg-white shadow-md rounded-lg p-4 border border-gray-400 flex flex-col justify-between">
+                        <div class="flex justify-between items-center mb-1">
+                            <h2 class="text-lg font-semibold capitalize text-blue-800 font-serif">
                                 <%= student.name.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') %>
-                    </h2>
-                    <img src="/upload/<%= student.imglocation %>" alt="No img"
-                         class="w-20 h-20 rounded-lg border object-cover">
-                </div>
+                            </h2>
+                            <img src="/upload/<%= student.imglocation %>" alt="No img"
+                            class="w-20 h-20 rounded-lg border object-cover  shadow-gray-400 shadow-2xl">
+                        </div>
 
                 <!-- Details -->
                 <div class="space-y-1 text-sm">
-                    <p><strong>Father' s Name:</strong>
+                    <p><strong class="text-green-800">Father' s Name:</strong>
                                     <%= student.fr_name.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ') %>
                     </p>
-                    <p><strong>Mother' s Name:</strong>
+                    <p><strong class="text-green-800">Mother' s Name:</strong>
                                         <%= (student.mother_name || ''
                                             ).split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ') %>
                     </p>
-                    <p><strong>Mobile:</strong> <%= student.mobile %> </p>
-                    <p><strong>DOB:</strong> <%= moment(student.dob).format(' DD-MM-YY') %> &nbsp;|&nbsp;
-                                            <strong>Gender:</strong>
+                    <p><strong class="text-green-800">Mobile:</strong> <%= student.mobile %> </p>
+                    <p><strong class="text-green-800">DOB:</strong> <%= moment(student.dob).format(' DD-MM-YY') %> &nbsp;|&nbsp;
+                                            <strong class="text-green-800">Gender:</strong>
                                             <%= student.gender %>
                                                 </p>
-                                                <p><strong>Class:</strong>
-                                                    <%= student.class %> &nbsp;|&nbsp; <strong>Sec:</strong>
-                                                        <%= student.sec %> &nbsp;|&nbsp; <strong>Roll:</strong>
+                                                <p><strong class="text-green-800">Class:</strong>
+                                                    <%= student.class %> &nbsp;|&nbsp; <strong class="text-green-800">Sec:</strong>
+                                                        <%= student.sec %> &nbsp;|&nbsp; <strong class="text-green-800">Roll:</strong>
                                                             <%= student.roll %>
                                                 </p>
-                                                <p><strong>Address:</strong>
+                                                <p><strong class="text-green-800">Address:</strong>
                                                     <%= student.address.line1 %>
                                                         <%= student.address.line2 %>,
                                                             <%= student.address.district %> - <%= student.address.pin %>
                                                 </p>
                         </div>
+                      <hr class="my-2 border-t-2 border-dotted border-gray-500">
 
                         <!-- Actions -->
                         <div class="flex justify-center gap-4 mt-4 text-xl">
@@ -128,8 +128,6 @@
 
 
     </div>
-
-
 
     <%- include('footer'); -%>
 
